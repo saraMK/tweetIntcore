@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TweetIntcore</string>
+    <string name="com.twitter.sdk.android.CONSUMER_KEY">OGCSs7xc4gKBJWcVJGKz5WYcF</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET">UHA6eorDAxeaj7x5T5ROa9WPoqH3WYkATYqwTIW4jaymXHq7bl</string>
+</resources>
