@@ -15,9 +15,12 @@ public class Followers {
     @SerializedName("next_cursor_str")
     public final String nextcusor;
 
-    public Followers(List<User> users,String nextcusor) {
+
+
+    public Followers(List<User> users, String nextcusor ) {
         this.users = users;
         this.nextcusor=nextcusor;
+
     }
 
 }

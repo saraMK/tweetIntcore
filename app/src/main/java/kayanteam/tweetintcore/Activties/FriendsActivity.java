@@ -1,19 +1,22 @@
 package kayanteam.tweetintcore.Activties;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.kosalgeek.android.caching.FileCacher;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.models.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ import java.util.List;
 
 import kayanteam.tweetintcore.Adapters.FriendsAdapter;
 import kayanteam.tweetintcore.Models.Followers;
+import kayanteam.tweetintcore.Models.FolwoersModel;
 import kayanteam.tweetintcore.MyTwitterApiClient;
 import kayanteam.tweetintcore.R;
 import kayanteam.tweetintcore.Utiles.Opertions;
@@ -32,13 +36,16 @@ public class FriendsActivity extends AppCompatActivity implements SwipeRefreshLa
 
 private SharedPrefrnceFile sharedPrefrnceFile;
     private RecyclerView recyclerView;
+    private Toolbar toolbar;
+    private ImageView change_lang;
     private GridLayoutManager gridLayoutManager;
     private FriendsAdapter friendsAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private String cursor="-1";
-    private List<User> userList;
-    private List<String>userList2;
-    private FileCacher<List<String>> stringCacher;
+    private List<FolwoersModel> userList;
+    private String language;
+
+    private FileCacher<List<FolwoersModel>> stringCacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +53,15 @@ private SharedPrefrnceFile sharedPrefrnceFile;
         Twitter.initialize(this);
         setContentView(R.layout.activity_main2);
         sharedPrefrnceFile=new SharedPrefrnceFile(this);
+        language=sharedPrefrnceFile.getSharedValue("lang","1");
+        sharedPrefrnceFile.set_loclization(language,FriendsActivity.this);
+        // init views
         recyclerView=(RecyclerView) findViewById(R.id.frindsActivity_recyclerview);
         mSwipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        userList2=new ArrayList<>();
+        toolbar=(Toolbar)findViewById(R.id.toolbar);
+        change_lang=(ImageView)toolbar.findViewById(R.id.change_language);
+        userList=new ArrayList<>();
 
          stringCacher = new FileCacher<>(FriendsActivity.this, "sometext.txt");
 
@@ -77,7 +89,8 @@ private SharedPrefrnceFile sharedPrefrnceFile;
         if (gridLayoutManager.findLastCompletelyVisibleItemPosition()==userList.size()-1) {
                     Log.d("scrolling","scrolling");
           //  if cursor.equals("0") mean no iteam to load and it is the end
-            if (!cursor.equals("0"))
+            if (!cursor.equals("0") )
+                if (Opertions.isNetworkAvailable(FriendsActivity.this))
                    loadData();
 
                 }
@@ -85,6 +98,25 @@ private SharedPrefrnceFile sharedPrefrnceFile;
         });
 
 
+        change_lang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // 1 >> en , 2 >>ar
+                if (language.equals("1")){
+                    language="2";
+
+                }
+                    else{
+                    language="1";
+                  }
+                sharedPrefrnceFile.saveSharedValue("lang",language);
+                sharedPrefrnceFile.set_loclization(language,FriendsActivity.this);
+                Intent intent=new Intent(getApplicationContext(),FriendsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -110,14 +142,18 @@ private SharedPrefrnceFile sharedPrefrnceFile;
             call.enqueue(new Callback<Followers>() {
                 @Override
                 public void success(Result<Followers> result) {
-                    Log.i("Get_success", "" + result.data.users);
-                    Log.i("Get_success", "" + result.data.nextcusor);
+
+                    Log.i("Get_success", "" + result.data);
 
                     // as refresher
                     if (cursor.equals("-1"))
-                        userList = new ArrayList<User>();
+                        userList = new ArrayList<>();
 
-                    userList.addAll(result.data.users);
+                    for (int i=0;i<result.data.users.size();i++){
+                        userList.add(new FolwoersModel(result.data.users.get(i).profileImageUrl,result.data.users.get(i).name,
+                            result.data.users.get(i).description,result.data.users.get(i).idStr,result.data.users.get(i).profileBackgroundImageUrl));
+                        Log.i("Get_success", "" + result.data.users.get(i).idStr);
+                    }
                     Log.d("sizelist", userList.size() + "");
                     if (friendsAdapter == null) {
                         setAdapter();
@@ -131,9 +167,8 @@ private SharedPrefrnceFile sharedPrefrnceFile;
                     mSwipeRefreshLayout.setRefreshing(false);
                     // cash list
                     try {
-                        userList2.add("bbb");
-                        userList2.add("bbb3");
-                        stringCacher.writeCache(userList2);
+
+                        stringCacher.writeCache(userList);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -153,10 +188,10 @@ private SharedPrefrnceFile sharedPrefrnceFile;
             try {
 
                 mSwipeRefreshLayout.setRefreshing(false);
-                userList2 = new ArrayList<>();
-                userList2 = stringCacher.readCache();
-                Log.d("stringCacher",userList2.get(0));
-                //setAdapter();
+                userList = new ArrayList<>();
+                userList = stringCacher.readCache();
+                Log.d("stringCacher",userList.get(0).getBio());
+                 setAdapter();
             }catch (Exception e){
 
                 e.printStackTrace();

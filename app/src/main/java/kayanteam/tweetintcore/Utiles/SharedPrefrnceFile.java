@@ -14,6 +14,7 @@ public class SharedPrefrnceFile {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private Context context;
+    private java.lang.String iso_code;
 
     public SharedPrefrnceFile(Context context){
         this.context=context;
@@ -33,7 +34,13 @@ public class SharedPrefrnceFile {
 
 
     
-    public void set_loclization(String iso_code , Context context){
+    public void set_loclization(String lang , Context context){
+
+        if (lang.equals("1"))
+            iso_code="en";
+        else
+            iso_code="ar";
+
         Locale locale = new Locale(iso_code);
         Locale.setDefault(locale);
         Configuration config = new Configuration();

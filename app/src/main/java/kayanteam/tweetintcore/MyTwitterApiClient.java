@@ -18,6 +18,9 @@ public class MyTwitterApiClient extends TwitterApiClient {
      public CustomService2 getCustomService2() {
         return getService(CustomService2.class);
     }
+    public CustomService getCustomService() {
+        return getService(CustomService.class);
+    }
 
 }
 
