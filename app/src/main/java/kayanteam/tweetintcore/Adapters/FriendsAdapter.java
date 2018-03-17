@@ -1,6 +1,7 @@
 package kayanteam.tweetintcore.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,10 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.twitter.sdk.android.core.models.User;
 
 import java.util.List;
 
+import kayanteam.tweetintcore.Activties.TimeLineActivity;
+import kayanteam.tweetintcore.Models.FolwoersModel;
 import kayanteam.tweetintcore.R;
 import kayanteam.tweetintcore.Utiles.ResizeViewsUtiles;
 
@@ -25,9 +27,9 @@ import kayanteam.tweetintcore.Utiles.ResizeViewsUtiles;
 
 public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.MyViewHolder>  {
 
-    private List<User> users;
+    private List<FolwoersModel> users;
     private Context context;
-    public FriendsAdapter(List<User> users,Context context){
+    public FriendsAdapter(List<FolwoersModel> users, Context context){
         this.users=users;
         this.context=context;
     }
@@ -41,16 +43,22 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.MyViewH
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.name_txt.setText(users.get(position).name);
-        holder.bio_txt.setText(users.get(position).description);
-        Picasso.with(context).load(users.get(position).profileImageUrlHttps).
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
+        holder.name_txt.setText(users.get(position).getName());
+        holder.bio_txt.setText(users.get(position).getBio());
+        Picasso.with(context).load(users.get(position).getImgUrl()).
                 placeholder(R.mipmap.twitter_icon).into(holder.imageView);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                Intent intent=new Intent(context, TimeLineActivity.class);
+                intent.putExtra("name",users.get(position).getName());
+                intent.putExtra("imgUrl",users.get(position).getImgUrl());
+                intent.putExtra("imgBgUrl",users.get(position).getbGimage());
+                intent.putExtra("userId",users.get(position).getId());
+                context.startActivity(intent);
             }
         });
 
