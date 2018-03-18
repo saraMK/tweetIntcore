@@ -13,5 +13,5 @@ import retrofit2.http.Query;
 
 public interface CustomServiceStatus {
     @GET("/1.1/statuses/user_timeline/list.json")
-    Call<List<TimelineModel>> show(@Query("user_id") String userId , @Query("count") Integer var3 );
+    Call<List<TimelineModel>> show(@Query("user_id") String userId, @Query("count") Integer var3);
 }
