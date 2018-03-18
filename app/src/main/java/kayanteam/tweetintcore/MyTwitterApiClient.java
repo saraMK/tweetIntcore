@@ -15,11 +15,11 @@ public class MyTwitterApiClient extends TwitterApiClient {
         super(session);
     }
 
-     public CustomService2 getCustomService2() {
-        return getService(CustomService2.class);
+     public CustomServiceFollwers getCustomService2() {
+        return getService(CustomServiceFollwers.class);
     }
-    public CustomService getCustomService() {
-        return getService(CustomService.class);
+    public CustomServiceStatus getCustomService() {
+        return getService(CustomServiceStatus.class);
     }
 
 }

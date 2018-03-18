@@ -12,12 +12,7 @@ public class TimelineModel {
     @Expose
     public final String text;
 
-    @SerializedName("profile_banner_url")
-    @Expose
-    public final String bnner;
-
-    public TimelineModel(String text, String bnner) {
+    public TimelineModel(String text) {
         this.text = text;
-        this.bnner = bnner;
-    }
+     }
 }

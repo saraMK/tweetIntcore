@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Twitter.initialize(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         sharedPrefrnceFile  = new SharedPrefrnceFile(this);
 
@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("sesssion", session.getUserId() + "\n" + session.getUserName());
         sharedPrefrnceFile.saveSharedValue("userID",session.getUserId()+"");
         sharedPrefrnceFile.saveSharedValue("usedName",session.getUserName()+"");
-        Intent intent = new Intent(this, FriendsActivity.class);
+        Intent intent = new Intent(this, FollowersActivity.class);
         startActivity(intent);
         finish();
     }

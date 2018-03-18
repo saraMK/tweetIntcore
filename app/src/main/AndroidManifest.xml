@@ -14,17 +14,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activties.FriendsActivity"
-            android:configChanges="orientation|screenSize">
+            android:name=".Activties.SplashActivity"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- <activity android:name=".Activties.FriendsActivity"></activity> -->
-        <activity android:name=".Activties.TimeLineActivity" />
-        <activity android:name=".Activties.ZoomImageActivity"></activity>
+         <activity android:name=".Activties.FollowersActivity"
+             android:configChanges="orientation|screenSize"></activity>
+        <activity android:name=".Activties.TimeLineActivity"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".Activties.ZoomImageActivity" />
+        <activity android:name=".Activties.LoginActivity"></activity>
     </application>
 
 </manifest>
