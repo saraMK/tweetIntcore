@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import kayanteam.tweetintcore.Activties.FollowersActivity;
 import kayanteam.tweetintcore.Activties.TimeLineActivity;
 import kayanteam.tweetintcore.Models.FolwoersModel;
 import kayanteam.tweetintcore.R;
@@ -53,12 +54,14 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.MyViewH
             @Override
             public void onClick(View v) {
 
-                Intent intent=new Intent(context, TimeLineActivity.class);
-                intent.putExtra("name",users.get(position).getName());
-                intent.putExtra("imgUrl",users.get(position).getImgUrl());
-                intent.putExtra("imgBgUrl",users.get(position).getbGimage());
-                intent.putExtra("userId",users.get(position).getId());
-                context.startActivity(intent);
+                if (context instanceof FollowersActivity) {
+                    Intent intent = new Intent(context, TimeLineActivity.class);
+                    intent.putExtra("name", users.get(position).getName());
+                    intent.putExtra("imgUrl", users.get(position).getImgUrl());
+                    intent.putExtra("imgBgUrl", users.get(position).getbGimage());
+                    intent.putExtra("userId", users.get(position).getId());
+                    context.startActivity(intent);
+                }
             }
         });
 
